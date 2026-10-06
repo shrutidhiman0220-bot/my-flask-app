@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block hero %}<div class="hero"><span class="lens">🔍</span><h1>{{ t('hero') }}</h1></div>{% endblock %}
+{% block body %}
+<form class="f"><input name="q" value="{{ q }}" placeholder="{{ t('search') }}">
+<select name="type"><option value="">{{ t('all') }}</option><option value="lost" {{ 'selected' if ty=='lost' }}>{{ t('lost') }}</option><option value="found" {{ 'selected' if ty=='found' }}>{{ t('found') }}</option></select>
+<select name="category"><option value="">{{ t('cat') }}</option>{% for x in cats %}<option {{ 'selected' if c==x }}>{{ x }}</option>{% endfor %}</select>
+<input type="date" name="from" value="{{ d1 }}" title="from"><input type="date" name="to" value="{{ d2 }}" title="to"><button>🔎</button></form>
+<div class="grid">{% for i in items %}
+<a class="card {{ i.type }} {{ i.status }}" style="animation-delay:{{ loop.index0 * 60 }}ms" href="/item/{{ i.id }}">
+{% if i.photo %}<img src="/static/uploads/{{ i.photo }}" alt="">{% endif %}
+<span class="badge">{{ t(i.type) }}</span> <strong>{{ i.name }}</strong>
+<p>{{ i.category }} | {{ i.place }} | {{ i.item_date }}</p>{% if i.status=='claimed' %}<em>{{ t('claimed') }}</em>{% endif %}</a>
+{% else %}<p>{{ t('empty') }}</p>{% endfor %}</div>{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block body %}
+<div class="box {{ it.type }}"><span class="badge" style="background:{{ '#1f8a5b' if it.type=='found' else '#c0392b' }}">{{ t(it.type) }}</span>
+<h2>{{ it.name }}</h2>{% if it.photo %}<img class="big" src="/static/uploads/{{ it.photo }}" alt="">{% endif %}
+<p>{{ it.category }} | {{ it.place }} | {{ it.item_date }}</p><p>{{ it.description }}</p>
+<p>{{ it.uname }} | {{ t('trust') }}: {{ it.utrust }}</p>
+{% if it.lat %}<div id="map"></div>{% endif %}
+{% if it.status=='pending' %}<p>{{ t('pending') }}</p>
+{% elif it.status=='approved' and me and me.id!=it.user_id %}
+<form method="post" action="/claim/{{ it.id }}"><label>{{ t('proof') }}</label><input name="proof" required maxlength="120"><button>{{ t('send') }}</button></form>
+{% elif it.status=='claimed' %}<p>{{ t('claimed') }}</p>{% endif %}</div>
+<div class="box"><h3>{{ t('matches') }}</h3>
+{% for s,r in ms %}<p><a href="/item/{{ r.id }}">{{ r.name }}</a> ({{ r.place }}) {{ (s*100)|int }}% {{ t('match') }}</p><div class="bar"><i style="width:{{ (s*100)|int }}%"></i></div>
+{% else %}<p>{{ t('nomatch') }}</p>{% endfor %}</div>{% endblock %}
+{% block js %}{% if it.lat %}<script>
+const m=L.map('map').setView([{{ it.lat }},{{ it.lng }}],15);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap'}).addTo(m);
+L.marker([{{ it.lat }},{{ it.lng }}]).addTo(m).bindPopup({{ it.name|tojson }});
+{% for s,r in ms %}{% if r.lat %}L.circleMarker([{{ r.lat }},{{ r.lng }}],{color:'#c0392b'}).addTo(m).bindPopup({{ r.name|tojson }});{% endif %}{% endfor %}
+</script>{% endif %}{% endblock %}

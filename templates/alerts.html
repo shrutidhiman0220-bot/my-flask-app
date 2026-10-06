@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block body %}
+<div class="box"><h3>{{ t('alerts') }}</h3>{% for n in ns %}<p>{{ n.created }}: {{ n.msg }}</p>{% else %}<p>{{ t('noalert') }}</p>{% endfor %}</div>
+{% for c in cl %}{% if c.status=='approved' %}<div class="box"><h3>{{ t('pass') }}: {{ c.name }}</h3><div id="qr{{ c.id }}"></div><p>{{ t('show') }} ({{ c.token }})</p></div>{% endif %}{% endfor %}{% endblock %}
+{% block js %}<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><script>
+{% for c in cl %}{% if c.status=='approved' %}new QRCode(document.getElementById('qr{{ c.id }}'),{text:location.origin+'/verify/{{ c.token }}',width:170,height:170});{% endif %}{% endfor %}
+</script>{% endblock %}

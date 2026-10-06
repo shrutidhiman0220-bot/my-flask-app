@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block body %}
+<div class="box"><h3>{{ t('stat') }}</h3><p>{{ t('lost') }}: {{ tot.l or 0 }} | {{ t('found') }}: {{ tot.f or 0 }} | {{ t('claimed') }}: {{ tot.c or 0 }}</p>
+<div class="grid"><div><h4>{{ t('byc') }}</h4><canvas id="c1"></canvas></div><div><h4>{{ t('byp') }}</h4><canvas id="c2"></canvas></div></div></div>
+<div class="box"><h3>{{ t('items') }}</h3>{% for i in pend %}<p>{{ t(i.type) }}: <a href="/item/{{ i.id }}">{{ i.name }}</a> ({{ i.place }})
+<a class="btn" href="/admin/item/{{ i.id }}/approve">{{ t('approve') }}</a> <a class="btn no" href="/admin/item/{{ i.id }}/reject">{{ t('reject') }}</a></p>{% endfor %}</div>
+<div class="box"><h3>{{ t('claims') }}</h3>{% for c in cls %}<p>{{ c.uname }} ({{ t('trust') }} {{ c.trust }}) &rarr; {{ c.name }}: "{{ c.proof }}"
+<a class="btn" href="/admin/claim/{{ c.id }}/approve">{{ t('approve') }}</a> <a class="btn no" href="/admin/claim/{{ c.id }}/reject">{{ t('reject') }}</a></p>{% endfor %}</div>{% endblock %}
+{% block js %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script><script>
+const a={{ bycat|tojson }},b={{ byplace|tojson }};
+new Chart(c1,{type:'doughnut',data:{labels:a.map(x=>x.k),datasets:[{data:a.map(x=>x.n)}]}});
+new Chart(c2,{type:'bar',data:{labels:b.map(x=>x.k),datasets:[{data:b.map(x=>x.n),backgroundColor:'#34508f'}]},options:{plugins:{legend:{display:false}}}});
+</script>{% endblock %}
