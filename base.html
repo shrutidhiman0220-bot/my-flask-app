@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="{{ lang }}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ t('title') }}</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></head><body>
+<nav><a class="b" href="/">🔎 {{ t('title') }}</a><a href="/">{{ t('home') }}</a><a href="/report">{{ t('report') }}</a>
+{% if me %}<a href="/alerts">{{ t('alerts') }}</a>{% if me.role=='admin' %}<a href="/admin">{{ t('admin') }}</a>{% endif %}
+<span style="color:#f2c94c">{{ me.name }} ({{ me.trust }})</span><a href="/logout">{{ t('logout') }}</a>
+{% else %}<a href="/login">{{ t('login') }}</a><a href="/register">{{ t('register') }}</a>{% endif %}
+<a href="/lang/{{ 'hi' if lang=='en' else 'en' }}">{{ 'हिंदी' if lang=='en' else 'English' }}</a></nav>
+{% block hero %}{% endblock %}<main>{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}{% block body %}{% endblock %}</main>
+<footer>{{ t('foot') }}</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>{% block js %}{% endblock %}</body></html>

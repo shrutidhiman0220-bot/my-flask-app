@@ -1,0 +1,4 @@
+{% extends "base.html" %}{% block body %}<div class="box" style="max-width:380px;margin:auto"><h2>{{ t(mode) }}</h2>
+<form method="post">{% if mode=='register' %}<label>{{ t('name') }}</label><input name="name" required>{% endif %}
+<label>{{ t('email') }}</label><input type="email" name="email" required><label>{{ t('pw') }}</label><input type="password" name="pw" required minlength="6">
+<button>{{ t(mode) }}</button></form></div>{% endblock %}
